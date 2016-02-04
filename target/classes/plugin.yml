@@ -1,0 +1,20 @@
+name: TrustedTeleport
+main: cc.isotopestudio.TrustedTeleport.trustedteleport.TrustedTeleport
+
+author: Mars
+description: Teleport to a player directly with permission
+website: http://isotopestudio.cc
+version: 1.0
+commands:
+  tt:
+    description: SubtleRPG Command.
+    usage: /<command>
+    aliases: t
+  ttp:
+    description: SubtleRPG Command.
+    usage: /<command> help
+    aliases: t
+permission:
+  TrustedTeleport.*:
+    description: Allow to use this plugin
+    default: op
