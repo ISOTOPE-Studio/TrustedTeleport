@@ -4,10 +4,12 @@ import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitTask;
 
 public class TrustedTeleportCommand implements CommandExecutor {
 	private final TrustedTeleport plugin;
@@ -186,11 +188,23 @@ public class TrustedTeleportCommand implements CommandExecutor {
 				if (trustedPlayers.size() > 0) {
 					for (int i = 0; i < trustedPlayers.size(); i++) {
 						if (trustedPlayers.get(i).equals(trustedPlayer.getName())) {
-							player.teleport(trustedPlayer);
-							player.sendMessage((new StringBuilder(plugin.prefix)).append(ChatColor.AQUA).append("传送到玩家")
-									.append(trustedPlayer.getName()).toString());
-							trustedPlayer.sendMessage((new StringBuilder(plugin.prefix)).append(ChatColor.AQUA)
-									.append("玩家").append(player.getName()).append("传送到你这里").toString());
+							double delaySeconds = plugin.getConfig().getDouble("Teleporting.delay");
+							long delayTicks = (int) (delaySeconds * 20);
+							boolean tpToLocWhereReq = plugin.getConfig().getBoolean("Teleporting.tpToLocWhereReq");
+							if (tpToLocWhereReq) {
+								Location loc = trustedPlayer.getLocation();
+								BukkitTask task = new TrustedTeleporTask(player, trustedPlayer, loc)
+										.runTaskLater(plugin, delayTicks);
+							} else {
+								BukkitTask task = new TrustedTeleporTask(player, trustedPlayer).runTaskLater(plugin,
+										delayTicks);
+							}
+
+							player.sendMessage((new StringBuilder(plugin.prefix)).append(ChatColor.AQUA)
+									.append(delaySeconds + "秒后传送到玩家").append(trustedPlayer.getName()).toString());
+							trustedPlayer
+									.sendMessage((new StringBuilder(plugin.prefix)).append(ChatColor.AQUA).append("玩家")
+											.append(player.getName()).append(delaySeconds + "秒后传送到你这里").toString());
 							return true;
 						}
 					}

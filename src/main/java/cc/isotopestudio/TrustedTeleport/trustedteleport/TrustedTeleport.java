@@ -10,7 +10,7 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class TrustedTeleport extends JavaPlugin {
-	public final String version = "v1.0-debug";
+	public final String version = "v1.2";
 
 	public final String prefix = (new StringBuilder()).append(ChatColor.GREEN).append("[").append(ChatColor.ITALIC)
 			.append(ChatColor.BOLD).append("信任传送").append(ChatColor.RESET).append(ChatColor.GREEN).append("]")
@@ -29,7 +29,7 @@ public final class TrustedTeleport extends JavaPlugin {
 	public void onEnable() {
 		getLogger().info("加载配置文件中");
 
-		//createFile("config");
+		createFile("config");
 		try {
 			getPlayersData().save(dataFile);
 		} catch (IOException e) {
