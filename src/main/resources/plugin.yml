@@ -1,4 +1,4 @@
-name: TrustedTeleport
+﻿name: TrustedTeleport
 main: cc.isotopestudio.TrustedTeleport.trustedteleport.TrustedTeleport
 
 author: Mars
@@ -7,13 +7,16 @@ website: http://isotopestudio.cc
 version: 1.0
 commands:
   tt:
-    description: SubtleRPG Command.
+    description: 传送到被信任的玩家
     usage: /<command>
+    permission: TrustedTeleport.teleport
+    permission-message: 你没有权限传送
     aliases: t
   ttp:
-    description: SubtleRPG Command.
+    description: 插件管理
     usage: /<command> help
-    aliases: t
+    permission: TrustedTeleport.setting
+    permission-message: 你没有权限设置传送
 permission:
   TrustedTeleport.*:
     description: Allow to use this plugin
