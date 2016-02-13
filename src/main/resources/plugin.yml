@@ -4,7 +4,7 @@ main: cc.isotopestudio.TrustedTeleport.trustedteleport.TrustedTeleport
 author: Mars
 description: Teleport to a player directly with permission
 website: http://isotopestudio.cc
-version: 1.2
+version: 1.2.1
 commands:
   tt:
     description: 传送到被信任的玩家

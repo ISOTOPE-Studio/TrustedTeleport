@@ -32,7 +32,7 @@ public class TrustedTeleportCommand implements CommandExecutor {
 								.toString());
 						return true;
 					}
-					Player trustedPlayer = (Bukkit.getServer().getPlayer(args[1]));
+					Player trustedPlayer = Bukkit.getServer().getPlayer(args[1]);
 					if (trustedPlayer == null) {
 						sender.sendMessage((new StringBuilder(plugin.prefix)).append(ChatColor.RED).append("玩家")
 								.append(args[1]).append("不在线").toString());
@@ -133,7 +133,7 @@ public class TrustedTeleportCommand implements CommandExecutor {
 							.append("Mars (ISOTOPE Studio)").toString());
 					sender.sendMessage((new StringBuilder()).append(ChatColor.GOLD).append(ChatColor.BOLD)
 							.append("网址： ").append(ChatColor.RESET).append(ChatColor.AQUA)
-							.append("http://isotopestudio.cc").toString());
+							.append("http://isotopestudio.cc/minecraft.html").toString());
 					return true;
 				}
 
@@ -172,45 +172,45 @@ public class TrustedTeleportCommand implements CommandExecutor {
 		}
 		if (cmd.getName().equalsIgnoreCase("tt")) {
 			if (args.length == 1 && sender instanceof Player) {
-				Player player = (Player) sender;
-				Player trustedPlayer = (Bukkit.getServer().getPlayer(args[0]));
-				if (trustedPlayer == null) {
+				Player requiringPlayer = (Player) sender;
+				Player requiredPlayer = (Bukkit.getServer().getPlayer(args[0]));
+				if (requiredPlayer == null) {
 					sender.sendMessage((new StringBuilder(plugin.prefix)).append(ChatColor.RED).append("玩家")
 							.append(args[0]).append("不在线").toString());
 					return true;
 				}
-				if (trustedPlayer == player) {
+				if (requiringPlayer == requiredPlayer) {
 					sender.sendMessage(
 							(new StringBuilder(plugin.prefix)).append(ChatColor.RED).append("传送到自己？！").toString());
 					return true;
 				}
-				List<String> trustedPlayers = plugin.getPlayersData().getStringList("Players." + player.getName());
+				List<String> trustedPlayers = plugin.getPlayersData().getStringList("Players." + requiredPlayer.getName());
 				if (trustedPlayers.size() > 0) {
 					for (int i = 0; i < trustedPlayers.size(); i++) {
-						if (trustedPlayers.get(i).equals(trustedPlayer.getName())) {
+						if (trustedPlayers.get(i).equals(requiringPlayer.getName())) {
 							double delaySeconds = plugin.getConfig().getDouble("Teleporting.delay");
 							long delayTicks = (int) (delaySeconds * 20);
 							boolean tpToLocWhereReq = plugin.getConfig().getBoolean("Teleporting.tpToLocWhereReq");
 							if (tpToLocWhereReq) {
-								Location loc = trustedPlayer.getLocation();
-								BukkitTask task = new TrustedTeleporTask(player, trustedPlayer, loc)
+								Location loc = requiredPlayer.getLocation();
+								BukkitTask task = new TrustedTeleporTask(requiringPlayer, requiredPlayer, loc)
 										.runTaskLater(plugin, delayTicks);
 							} else {
-								BukkitTask task = new TrustedTeleporTask(player, trustedPlayer).runTaskLater(plugin,
+								BukkitTask task = new TrustedTeleporTask(requiringPlayer, requiredPlayer).runTaskLater(plugin,
 										delayTicks);
 							}
 
-							player.sendMessage((new StringBuilder(plugin.prefix)).append(ChatColor.AQUA)
-									.append(delaySeconds + "秒后传送到玩家").append(trustedPlayer.getName()).toString());
-							trustedPlayer
+							requiringPlayer.sendMessage((new StringBuilder(plugin.prefix)).append(ChatColor.AQUA)
+									.append(delaySeconds + "秒后传送到玩家").append(requiredPlayer.getName()).toString());
+							requiredPlayer
 									.sendMessage((new StringBuilder(plugin.prefix)).append(ChatColor.AQUA).append("玩家")
-											.append(player.getName()).append(delaySeconds + "秒后传送到你这里").toString());
+											.append(requiringPlayer.getName()).append(delaySeconds + "秒后传送到你这里").toString());
 							return true;
 						}
 					}
 				}
 				sender.sendMessage((new StringBuilder(plugin.prefix)).append(ChatColor.RED).append("你不被玩家")
-						.append(trustedPlayer.getName()).append("信任").toString());
+						.append(requiringPlayer.getName()).append("信任").toString());
 				return true;
 
 			} else {
